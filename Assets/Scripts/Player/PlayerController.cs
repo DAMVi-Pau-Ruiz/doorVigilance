@@ -9,10 +9,15 @@ public class PlayerController : MonoBehaviour
 
     public Transform cameraTransform;
 
+    public float interactDistance = 3f;
+
+    private CharacterController characterController;
     private float rotationX = 0f;
 
     void Start()
     {
+        characterController = GetComponent<CharacterController>();
+
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -40,7 +45,7 @@ public class PlayerController : MonoBehaviour
         Vector3 movement = transform.right * movementInput.x
                          + transform.forward * movementInput.y;
 
-        transform.position += movement.normalized * speed * Time.deltaTime;
+        characterController.Move(movement.normalized * speed * Time.deltaTime);
 
         // Movimiento del ratón
         if (Mouse.current != null)
@@ -59,6 +64,35 @@ public class PlayerController : MonoBehaviour
 
             cameraTransform.localRotation =
                 Quaternion.Euler(rotationX, 0f, 0f);
+        }
+
+        if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+        {
+            Debug.Log("Has pulsado E");
+
+            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+            RaycastHit hit;
+
+            if (Physics.Raycast(ray, out hit, interactDistance))
+            {
+                Debug.Log("Raycast detectado: " + hit.collider.name);
+
+                DoorController door = hit.collider.GetComponentInParent<DoorController>();
+
+                if (door != null)
+                {
+                    Debug.Log("DoorController encontrado");
+                    door.ToggleDoor();
+                }
+                else
+                {
+                    Debug.Log("No se ha encontrado DoorController");
+                }
+            }
+            else
+            {
+                Debug.Log("El Raycast no detecta nada");
+            }
         }
     }
 
