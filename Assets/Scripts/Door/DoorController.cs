@@ -138,4 +138,9 @@ public class DoorController : MonoBehaviour
             ChangeState(DOOR_STATES.CLOSING);
         }
     }
+
+    public DOOR_STATES GetCurrentState()
+    {
+        return doorState;
+    }
 }

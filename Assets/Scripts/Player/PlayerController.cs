@@ -4,12 +4,11 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
-    public float speed = 5f;
-    public float mouseSensitivity = 2f;
-
-    public Transform cameraTransform;
-
-    public float interactDistance = 3f;
+    [SerializeField] private PlayerUI playerUI;
+    [SerializeField] private float speed = 5f;
+    [SerializeField] private float mouseSensitivity = 2f;
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private float interactDistance = 3f;
 
     private CharacterController characterController;
     private float rotationX = 0f;
@@ -66,12 +65,39 @@ public class PlayerController : MonoBehaviour
                 Quaternion.Euler(rotationX, 0f, 0f);
         }
 
+        Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, interactDistance))
+        {
+            DoorController door = hit.collider.GetComponentInParent<DoorController>();
+
+            if (door != null)
+            {
+                playerUI.ShowInteractionUI();
+                switch (door.GetCurrentState())
+                {
+                    case DOOR_STATES.OPEN:
+                        playerUI.SetText("[ e ] close door");
+                        break;
+                    case DOOR_STATES.CLOSED:
+                        playerUI.SetText("[ e ] open door");
+                        break;
+                }
+            }
+            else
+            {
+                playerUI.HideInteractionUI();
+            }
+        }
+        else
+        {
+            playerUI.HideInteractionUI();
+        }
+
         if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
         {
             Debug.Log("Has pulsado E");
-
-            Ray ray = new Ray(cameraTransform.position, cameraTransform.forward);
-            RaycastHit hit;
 
             if (Physics.Raycast(ray, out hit, interactDistance))
             {
