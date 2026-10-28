@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - CarDestroy
+  - Lantern
   layers:
   - Default
   - TransparentFX

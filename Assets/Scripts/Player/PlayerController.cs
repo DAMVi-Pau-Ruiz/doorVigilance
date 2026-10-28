@@ -9,11 +9,17 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float mouseSensitivity = 2f;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private float interactDistance = 3f;
+    [SerializeField] private GameObject lanternPrefab;
+    [SerializeField] private Transform leftHandTransform;
+    [SerializeField] private Transform rightHandTransform;
+    [SerializeField] private bool isLeftHandler = false;
 
     private CharacterController characterController;
     private float rotationX = 0f;
+    private bool hasLantern = false;
+    private LanternController currentLantern;
 
-    void Start()
+    private void Start()
     {
         characterController = GetComponent<CharacterController>();
 
@@ -21,7 +27,7 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
     }
 
-    void Update()
+    private void Update()
     {
         // Movimiento WASD
         Vector2 movementInput = Vector2.zero;
@@ -75,14 +81,26 @@ public class PlayerController : MonoBehaviour
             if (door != null)
             {
                 playerUI.ShowInteractionUI();
+
                 switch (door.GetCurrentState())
                 {
                     case DOOR_STATES.OPEN:
                         playerUI.SetText("[ e ] close door");
                         break;
+
                     case DOOR_STATES.CLOSED:
                         playerUI.SetText("[ e ] open door");
                         break;
+                }
+            }
+            else if (hit.collider.CompareTag("Lantern") && !hasLantern)
+            {
+                playerUI.ShowInteractionUI();
+                playerUI.SetText("[ e ] take lantern");
+                if (Keyboard.current != null && Keyboard.current.eKey.wasPressedThisFrame)
+                {
+                    PutLantern();
+                    Destroy(hit.collider.gameObject);
                 }
             }
             else
@@ -120,11 +138,36 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("El Raycast no detecta nada");
             }
         }
+
+        if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            if (hasLantern && currentLantern != null)
+            {
+                currentLantern.ToggleLantern();
+                Debug.Log("Linterna interaccionada");
+            }
+            else
+            {
+                Debug.Log("No tiene la linterna en las manos");
+            }
+        }
+
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    public void PutLantern()
+    {
+        Transform currentHand = isLeftHandler ? leftHandTransform : rightHandTransform;
+
+        GameObject lantern = Instantiate(lanternPrefab, currentHand);
+        
+        currentLantern = lantern.GetComponent<LanternController>();
+        currentLantern.SetCamera(cameraTransform);
+        hasLantern = true;
     }
 }

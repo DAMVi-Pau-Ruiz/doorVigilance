@@ -37,6 +37,11 @@ public class CameraController : MonoBehaviour
     [SerializeField] private bool showGizmos = true;
     [SerializeField, Range(5, 60)] private int gizmoSegments = 30;
 
+    [Header("Luz de seguridad")]
+    [SerializeField] private Light securityLight;
+    [SerializeField] private Color normalColor = new Color(1f, 0.85f, 0.55f);
+    [SerializeField] private Color chasingColor = Color.red;
+
 
     private float initialRotationY;
     private float patrolTargetY;
@@ -60,6 +65,8 @@ public class CameraController : MonoBehaviour
             return;
 
         cameraState = newState;
+
+        UpdateLightColor();
 
         if (newState == SecurityCameraState.IDLE)
         {
@@ -289,5 +296,16 @@ public class CameraController : MonoBehaviour
         Gizmos.DrawRay(origin, leftVision * visionDistance);
         Gizmos.DrawRay(origin, rightVision * visionDistance);
         Gizmos.DrawRay(origin, forward * visionDistance);
+    }
+
+    void UpdateLightColor()
+    {
+        if (securityLight == null)
+            return;
+
+        if (cameraState == SecurityCameraState.CHASING)
+            securityLight.color = chasingColor;
+        else
+            securityLight.color = normalColor;
     }
 }
