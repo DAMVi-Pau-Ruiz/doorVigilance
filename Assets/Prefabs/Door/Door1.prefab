@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::DoorController
   pivot: {fileID: 7074018258082363940}
-  doorState: 0
+  doorState: 1
   openAngle: 90
   rotationSpeed: 90
 --- !u!1 &4869695328920487747
