@@ -99,6 +99,8 @@ MonoBehaviour:
   doorState: 1
   openAngle: 90
   rotationSpeed: 90
+  openText: '[ E ] Open door'
+  closeText: '[ E ] Close door'
 --- !u!1 &4869695328920487747
 GameObject:
   m_ObjectHideFlags: 0

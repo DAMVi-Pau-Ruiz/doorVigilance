@@ -6,6 +6,10 @@ TagManager:
   tags:
   - CarDestroy
   - Lantern
+  - Concrete
+  - Grass
+  - Stone
+  - Metal
   layers:
   - Default
   - TransparentFX

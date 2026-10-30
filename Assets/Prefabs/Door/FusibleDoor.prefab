@@ -189,3 +189,5 @@ MonoBehaviour:
   doorState: 1
   openAngle: -90
   rotationSpeed: 90
+  openText: '[ E ] Open pannel'
+  closeText: '[ E ] Close pannel'

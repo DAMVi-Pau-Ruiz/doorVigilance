@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour
         GameObject lantern = Instantiate(lanternPrefab, currentHand);
         
         currentLantern = lantern.GetComponent<LanternController>();
-        currentLantern.SetCamera(cameraTransform);
+        currentLantern.Equip(cameraTransform);
         hasLantern = true;
     }
 }

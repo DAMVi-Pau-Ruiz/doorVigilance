@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2674157786677936930}
   - component: {fileID: 1258458490853126438}
   - component: {fileID: 767358714961613996}
+  - component: {fileID: 1036305521619447063}
   m_Layer: 0
   m_Name: LanternProp
   m_TagString: Lantern
@@ -82,6 +83,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 126
   m_CollisionDetection: 0
+--- !u!114 &1036305521619447063
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7888720377463887865}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d46f8906a9dbd844d8a3934f6422393b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PropController
+  playerInventory: {fileID: 0}
+  interactionText: '[ E ] Grab lantern'
 --- !u!1001 &857444854696177175
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -9,12 +9,17 @@ public enum DOOR_STATES
     CLOSING
 }
 
-public class DoorController : MonoBehaviour
+public class DoorController : MonoBehaviour, IInteractable
 {
+    [Header("Door")]
     [SerializeField] private Transform pivot;
     [SerializeField] private DOOR_STATES doorState;
     [SerializeField] private float openAngle = 90f;
     [SerializeField] private float rotationSpeed = 90f;
+
+    [Header("UI")]
+    [SerializeField] private string openText = "[ E ] Open door";
+    [SerializeField] private string closeText = "[ E ] Close door";
 
     private Quaternion closedRotation;
     private Quaternion openRotation;
@@ -40,7 +45,6 @@ public class DoorController : MonoBehaviour
 
     void EnterState(DOOR_STATES newState)
     {
-        // Reiniciar temporizador
         currentStateTime = 0;
 
         switch (newState)
@@ -111,36 +115,44 @@ public class DoorController : MonoBehaviour
         }
     }
 
-    public void OpenDoor()
+    public void Interact()
     {
-        if (doorState == DOOR_STATES.CLOSED)
-        {
-            ChangeState(DOOR_STATES.OPENING);
-        }
-    }
-
-    public void CloseDoor()
-    {
-        if (doorState == DOOR_STATES.OPEN)
-        {
-            ChangeState(DOOR_STATES.CLOSING);
-        }
+        ToggleDoor();
     }
 
     public void ToggleDoor()
     {
-        if (doorState == DOOR_STATES.CLOSED)
+        switch (doorState)
         {
-            ChangeState(DOOR_STATES.OPENING);
-        }
-        else if (doorState == DOOR_STATES.OPEN)
-        {
-            ChangeState(DOOR_STATES.CLOSING);
+            case DOOR_STATES.CLOSED:
+                ChangeState(DOOR_STATES.OPENING);
+                break;
+            case DOOR_STATES.OPEN:
+                ChangeState(DOOR_STATES.CLOSING);
+                break;
         }
     }
 
     public DOOR_STATES GetCurrentState()
     {
         return doorState;
+    }
+
+    public string InteractionText
+    {
+        get
+        {
+            switch (doorState)
+            {
+                case DOOR_STATES.CLOSED:
+                    return openText;
+
+                case DOOR_STATES.OPEN:
+                    return closeText;
+
+                default:
+                    return "";
+            }
+        }
     }
 }
