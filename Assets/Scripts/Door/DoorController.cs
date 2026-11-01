@@ -21,29 +21,32 @@ public class DoorController : MonoBehaviour, IInteractable
     [SerializeField] private string openText = "[ E ] Open door";
     [SerializeField] private string closeText = "[ E ] Close door";
 
+    [Header("Audio")]
+    [SerializeField] private DoorAudioController doorAudio;
+
     private Quaternion closedRotation;
     private Quaternion openRotation;
     private float currentStateTime;
 
-    void Start()
+    private void Start()
     {
         closedRotation = pivot.localRotation;
         openRotation = closedRotation * Quaternion.Euler(0, openAngle, 0);
     }
 
-    void Update()
+    private void Update()
     {
         UpdateState();
     }
 
-    void ChangeState(DOOR_STATES newState)
+    private void ChangeState(DOOR_STATES newState)
     {
         ExitState();
         doorState = newState;
         EnterState(newState);
     }
 
-    void EnterState(DOOR_STATES newState)
+    private void EnterState(DOOR_STATES newState)
     {
         currentStateTime = 0;
 
@@ -65,7 +68,7 @@ public class DoorController : MonoBehaviour, IInteractable
         }
     }
 
-    void UpdateState()
+    private void UpdateState()
     {
         currentStateTime += Time.deltaTime;
 
@@ -97,7 +100,7 @@ public class DoorController : MonoBehaviour, IInteractable
         }
     }
 
-    void ExitState()
+    private void ExitState()
     {
         switch (doorState)
         {
@@ -126,9 +129,11 @@ public class DoorController : MonoBehaviour, IInteractable
         {
             case DOOR_STATES.CLOSED:
                 ChangeState(DOOR_STATES.OPENING);
+                doorAudio.PlayOpenSound();
                 break;
             case DOOR_STATES.OPEN:
                 ChangeState(DOOR_STATES.CLOSING);
+                doorAudio.PlayCloseSound();
                 break;
         }
     }
